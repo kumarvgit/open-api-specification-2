@@ -32,6 +32,24 @@ paths:
             application/json:
               schema: #reponse type this can be another object
                 $ref: "#/components/schemas/CustomerPagedList"
+  /v1/customers/{customerId}:
+    get:
+      parameters:
+        - name: customerId # this should match as it is in path else it won't match up
+          in: path
+          required: true
+          description: Id of customer
+          schema:
+            type: string
+            format: uuid
+            description: uuid is a system generated value and it is hard to gess the next one
+      responses:
+        '200':
+          description: response when customer data is found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
   /v1/beers:
     get:
       parameters: 
@@ -52,7 +70,7 @@ components:
     PageNumberParam:
       name: pageNumber
       in: query
-      required: true
+      required: false
       description: Page number to be fetched
       schema:
         type: integer
@@ -61,7 +79,7 @@ components:
     PageSizeParam:
       name: pageSize
       in: query
-      required: true
+      required: false
       description: Number of records to be fetched
       schema:
         type: integer
