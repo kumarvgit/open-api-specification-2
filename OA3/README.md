@@ -21,4 +21,8 @@
 - local json file "$ref": "Pet.json"
 - local yaml file "$ref": Pet.yaml
 - one defenition file with references in it "$ref": "defenitions.json#pet"
-
+### Parameter https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#fixed-fields-10
+- path
+- query
+- header
+- cookie

@@ -21,6 +21,25 @@ servers:
 paths:
   /v1/customers:
     get:
+      parameters: 
+        - name: pageNumber
+          in: query # where to send the query path, query, header, cookie
+          required: true
+          schema:
+            type: integer
+            format: int32
+            default: 0 # default value to be sent
+          description: Page number to be fetched
+        - name: pageSize
+          in: query
+          description: Number of elements to be fetched
+          schema:
+            type: integer
+            format: int32
+            maximum: 100
+            default: 25
+          required: true
+          
       responses: # list of responses
         '200':
           description: List of customers
