@@ -36,57 +36,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  description: beer object
-                  properties:
-                    beerName:
-                      type: string
-                      minLength: 2
-                      maxLength: 100
-                      description: name of the beer
-                      example: Carlsberg
-                    style:
-                      type: string
-                      minLength: 2
-                      maxLength: 20
-                      enum: 
-                        - ALE
-                        - PALE_ALE
-                        - IPA
-                        - WHEAT
-                        - LAGER
-                      description: style of the beer
-                    price:
-                      type: number
-                      format: float # define the subtype
-                      minimum: 0.1
-                      description: price of the beer
-                      example: 10.99
-                    quantityOnHand:
-                      type: integer
-                      format: int32 # define the subtype
-                      minimum: 1
-                      maximum: 500
-                      description: Quantity to be held
-                      example: 250
-                    brewery:
-                      type: object
-                      description: Brewery producing this
-                      properties:
-                        name:
-                          type: string
-                          minLength: 2
-                          maxLength: 100
-                          description: Name of the brewery
-                          example: Titos
-                        location:
-                          type: string
-                          minLength: 2
-                          maxLength: 100
-                          description: The city of the brewery
-                          example: BLR
+                $ref: "#/components/schemas/BeerList"
                       
         '404':
           description: Beers not found
@@ -143,3 +93,59 @@ components:
       description: List of customers
       items:
         $ref: "#/components/schemas/Customer"
+    Brewery:
+      type: object
+      description: Brewery producing this
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Name of the brewery
+          example: Titos
+        location:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: The city of the brewery
+          example: BLR
+    Beer:
+      type: object
+      description: beer object
+      properties:
+        beerName:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: name of the beer
+          example: Carlsberg
+        style:
+          type: string
+          minLength: 2
+          maxLength: 20
+          enum: 
+            - ALE
+            - PALE_ALE
+            - IPA
+            - WHEAT
+            - LAGER
+          description: style of the beer
+        price:
+          type: number
+          format: float # define the subtype
+          minimum: 0.1
+          description: price of the beer
+          example: 10.99
+        quantityOnHand:
+          type: integer
+          format: int32 # define the subtype
+          minimum: 1
+          maximum: 500
+          description: Quantity to be held
+          example: 250
+        brewery:
+          $ref: "#/components/schemas/Brewery"
+    BeerList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Beer"
