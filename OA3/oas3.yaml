@@ -65,6 +65,25 @@ paths:
                       
         '404':
           description: Beers not found
+  /v1/beers/{beerId}:
+    get:
+      parameters: 
+        - name: beerId
+          description: beer id to be found
+          in: path # indicates path param
+          required: true # requied true is mandatory for required
+          schema:
+            type: string
+            format: uuid
+            description: uuid is a system generated value
+      description: find beer by id
+      responses:
+        '200':
+          description: found beer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beer'
 components:
   parameters:
     PageNumberParam:
