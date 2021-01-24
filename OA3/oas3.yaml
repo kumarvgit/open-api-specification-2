@@ -22,7 +22,7 @@ paths:
   /v1/customers:
     get:
       tags: 
-        - Customer # Grouping together
+        - Customers # Grouping together
       operationId: getAllCustomersV1 # this is used by code gens
       summary: List all customer
       description: Get all customer in system
@@ -37,10 +37,25 @@ paths:
             application/json:
               schema: #reponse type this can be another object
                 $ref: "#/components/schemas/CustomerPagedList"
+    post:
+      tags: 
+        - Customers
+      summary: Create a new customer
+      description: Add anew customer to the system
+      operationId: postCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '201':
+          description: "Customer created"
   /v1/customers/{customerId}:
     get:
       tags: 
-        - Customer # Grouping together
+        - Customers # Grouping together
       operationId: getCustomerByIdV1 # this is used by code gens
       summary: Get single customerdetails
       description: Get complete  description of a **customer**
