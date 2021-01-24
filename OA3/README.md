@@ -33,3 +33,5 @@
 - case-sensitive
 - must be unique
 - recommende to follow programming practices
+
+## readOnly property readonly is a property which says it should not be supplied by the requester but may or may not be set by the server it is opposite of writeOnly
