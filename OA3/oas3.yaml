@@ -49,6 +49,24 @@ paths:
                 $ref: "#/components/schemas/CustomerPagedList"
   /v1/beers:
     get:
+      parameters: 
+        - name: pageNumber
+          in: query
+          required: true
+          description: Page number to be fetched
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: pageSize
+          in: query
+          required: true
+          description: Number of records to be fetched
+          schema:
+            type: integer
+            format: int32
+            default: 25
+            maximum: 100
       responses:
         '200':
           description: List of Beers
