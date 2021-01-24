@@ -21,6 +21,11 @@ servers:
 paths:
   /v1/customers:
     get:
+      tags: 
+        - Customer # Grouping together
+      operationId: getAllCustomersV1 # this is used by code gens
+      summary: List all customer
+      description: Get all customer in system
       parameters: 
         - $ref: "#/components/parameters/PageNumberParam"
         - $ref: "#/components/parameters/PageSizeParam"
@@ -34,6 +39,11 @@ paths:
                 $ref: "#/components/schemas/CustomerPagedList"
   /v1/customers/{customerId}:
     get:
+      tags: 
+        - Customer # Grouping together
+      operationId: getCustomerByIdV1 # this is used by code gens
+      summary: Get single customerdetails
+      description: Get complete  description of a **customer**
       parameters:
         - name: customerId # this should match as it is in path else it won't match up
           in: path
@@ -52,6 +62,11 @@ paths:
                 $ref: '#/components/schemas/Customer'
   /v1/beers:
     get:
+      tags: 
+        - Beer # Grouping together
+      operationId: getAllBeersV1 # this is used by code gens
+      summary: Get all beers in system
+      description: Find all beers in system
       parameters: 
         - $ref: "#/components/parameters/PageNumberParam"
         - $ref: "#/components/parameters/PageSizeParam"
@@ -67,6 +82,11 @@ paths:
           description: Beers not found
   /v1/beers/{beerId}:
     get:
+      tags: 
+        - Beer
+      operationId: getBeerByIdV1 # this is used by code gens
+      summary: Get details of specified beer
+      description: Get details of single **beer**
       parameters: 
         - name: beerId
           description: beer id to be found
@@ -76,7 +96,6 @@ paths:
             type: string
             format: uuid
             description: uuid is a system generated value
-      description: find beer by id
       responses:
         '200':
           description: found beer

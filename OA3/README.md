@@ -26,3 +26,10 @@
 - query
 - header
 - cookie
+## Summary and description is more important when sharing the API
+## OAS supports markdown
+## tags are logical grouping
+## operation id is going to used in codegens and it has following props
+- case-sensitive
+- must be unique
+- recommende to follow programming practices
