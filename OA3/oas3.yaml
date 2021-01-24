@@ -42,7 +42,7 @@ paths:
         - Customers
       summary: Create a new customer
       description: Add anew customer to the system
-      operationId: postCustomer
+      operationId: postCustomerV1
       requestBody:
         required: true
         content:
@@ -67,14 +67,7 @@ paths:
       summary: Get single customerdetails
       description: Get complete  description of a **customer**
       parameters:
-        - name: customerId # this should match as it is in path else it won't match up
-          in: path
-          required: true
-          description: Id of customer
-          schema:
-            type: string
-            format: uuid
-            description: uuid is a system generated value and it is hard to gess the next one
+        - $ref: '#/components/parameters/CustomerIdPathParams'
       responses:
         '200':
           description: response when customer data is found
@@ -82,10 +75,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
+    put:
+      summary: Update customer
+      description: update customer by id
+      operationId: updateCustomerByIdV1
+      tags: 
+        - Customers
+      parameters: 
+        - $ref: '#/components/parameters/CustomerIdPathParams'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '204':
+          description: Customer updated
+    delete:
+      summary: Delete a customer by id
+      description: Delete a customer by its id
+      operationId: deleteCustomerByIdV1
+      tags: 
+        - Customers
+      parameters: 
+        - $ref: '#/components/parameters/CustomerIdPathParams'
+      responses:
+        '200':
+          description: Customer deleted successfully
+          
   /v1/beers:
     get:
       tags: 
-        - Beer # Grouping together
+        - Beers # Grouping together
       operationId: getAllBeersV1 # this is used by code gens
       summary: Get all beers in system
       description: Find all beers in system
@@ -106,6 +127,7 @@ paths:
       tags: 
         - Beers
       description: creats a new beer
+      operationId: postBeersV1
       summary: created a new beer
       requestBody:
         required: true
@@ -130,14 +152,7 @@ paths:
       summary: Get details of specified beer
       description: Get details of single **beer**
       parameters: 
-        - name: beerId
-          description: beer id to be found
-          in: path # indicates path param
-          required: true # requied true is mandatory for required
-          schema:
-            type: string
-            format: uuid
-            description: uuid is a system generated value
+        - $ref: '#/components/parameters/BeerIdPathParam'
       responses:
         '200':
           description: found beer
@@ -145,6 +160,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Beer'
+    put:
+      parameters:
+        - $ref: '#/components/parameters/BeerIdPathParam'
+      description: Update beer
+      summary: Update beer
+      operationId: updateBeerByIdV1
+      tags: 
+        - Beers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Beer'
+      responses:
+        '204':
+          description: Beer updated
+    delete:
+      tags: 
+        - Beers
+      parameters: 
+        - $ref: '#/components/parameters/BeerIdPathParam'
+      description: Delete beer by id
+      summary: Delete a beer by its id
+      operationId: deleteBeerByIdV1
+      responses:
+        '200':
+          description: Beer deleted successfully
 components:
   parameters:
     PageNumberParam:
@@ -166,6 +208,24 @@ components:
         format: int32
         default: 25
         maximum: 100
+    CustomerIdPathParams:
+      name: customerId # this should match as it is in path else it won't match up
+      in: path
+      required: true
+      description: Id of customer
+      schema:
+        type: string
+        format: uuid
+        description: uuid is a system generated value and it is hard to gess the next one
+    BeerIdPathParam:
+      name: beerId
+      description: beer id to be found
+      in: path # indicates path param
+      required: true # requied true is mandatory for required
+      schema:
+        type: string
+        format: uuid
+        description: uuid is a system generated value
   schemas:
     Address:
       type: object
