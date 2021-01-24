@@ -16,4 +16,9 @@
 #### externalDocs 	External Documentation Object 	Additional external documentation.
 ## YAML clossly matches https://json-schema.org/understanding-json-schema/index.html to json types and patterns
 ### Json Schema is Last updated on Apr 12, 2020.
+### component schema reference can be in either
+- same file "$ref": "#/components/schema/pet"
+- local json file "$ref": "Pet.json"
+- local yaml file "$ref": Pet.yaml
+- one defenition file with references in it "$ref": "defenitions.json#pet"
 
