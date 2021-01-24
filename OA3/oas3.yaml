@@ -102,10 +102,30 @@ paths:
                       
         '404':
           description: Beers not found
+    post:
+      tags: 
+        - Beers
+      description: creats a new beer
+      summary: created a new beer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Beer'
+      responses:
+        '201':
+          description: Beer created
+          headers:
+            Location:
+              schema:
+                type: string
+                description: location of the created resource
+                example: http://example.com/v1/beers/{idOfCreatedResouce}
   /v1/beers/{beerId}:
     get:
       tags: 
-        - Beer
+        - Beers
       operationId: getBeerByIdV1 # this is used by code gens
       summary: Get details of specified beer
       description: Get details of single **beer**
@@ -219,6 +239,11 @@ components:
       type: object
       description: beer object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true # readonly is a property which says it should not be supplied by the requester but may or may not be set by the server it is opposite of writeOnly
+          description: id of the resource
         beerName:
           type: string
           minLength: 2
