@@ -3,6 +3,7 @@
 ## https://github.com/OAI/OpenAPI-Specification/tree/master/
 ## https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
 ## Objects https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#fixed-fields
+## Obder brother of OA3 Swagger docs: https://swagger.io/docs/specification/about/
 ## version, info and paths is required
 ## Sections of OA3
 #### Field Name 	Type 	Description
@@ -37,3 +38,6 @@
 ## readOnly property readonly is a property which says it should not be supplied by the requester but may or may not be set by the server it is opposite of writeOnly
 ## delete should return 200 for successfully deletion
 ## 409 status code is used to indicate a state of conflict
+## Callback is an event when we need to respond to that event exemple send a notification to some server
+### https://swagger.io/docs/specification/callbacks/
+### https://swagger.io/docs/specification/about/
