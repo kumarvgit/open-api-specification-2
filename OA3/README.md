@@ -36,3 +36,4 @@
 
 ## readOnly property readonly is a property which says it should not be supplied by the requester but may or may not be set by the server it is opposite of writeOnly
 ## delete should return 200 for successfully deletion
+## 409 status code is used to indicate a state of conflict

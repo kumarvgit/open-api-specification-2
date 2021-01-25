@@ -59,6 +59,10 @@ paths:
                 format: uri
                 description: the location of created resource in Location header
                 example: http://example.com/v1/customers/{assignedId}
+        '400':
+          description: Bad request
+        '409': # this is returned when there is a conflict
+          description: Conflit in creation 
   /v1/customers/{customerId}:
     get:
       tags: 
@@ -75,6 +79,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
+        '404':
+          description: Customer not found
     put:
       summary: Update customer
       description: update customer by id
@@ -91,6 +97,12 @@ paths:
       responses:
         '204':
           description: Customer updated
+        '400':
+          description: Bad request
+        '404':
+          description: Customer not found
+        '409':
+          description: Conflict
     delete:
       summary: Delete a customer by id
       description: Delete a customer by its id
@@ -102,7 +114,8 @@ paths:
       responses:
         '200':
           description: Customer deleted successfully
-          
+        '404':
+          description: Customer not found
   /v1/beers:
     get:
       tags: 
@@ -144,6 +157,10 @@ paths:
                 type: string
                 description: location of the created resource
                 example: http://example.com/v1/beers/{idOfCreatedResouce}
+        '400':
+          description: Bad request
+        '409': # this is returned when there is a conflict
+          description: Conflit in creation 
   /v1/beers/{beerId}:
     get:
       tags: 
@@ -160,6 +177,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Beer'
+        '404':
+          description: Beer not found
     put:
       parameters:
         - $ref: '#/components/parameters/BeerIdPathParam'
@@ -176,6 +195,12 @@ paths:
       responses:
         '204':
           description: Beer updated
+        '400':
+          description: Bad request
+        '404':
+          description: Beer not found
+        '409':
+          description: Conflicting operation
     delete:
       tags: 
         - Beers
@@ -187,6 +212,8 @@ paths:
       responses:
         '200':
           description: Beer deleted successfully
+        '404':
+          description: Beers not found
 components:
   parameters:
     PageNumberParam:
