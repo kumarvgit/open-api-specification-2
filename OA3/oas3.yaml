@@ -37,6 +37,7 @@ paths:
             application/json:
               schema: #reponse type this can be another object
                 $ref: "#/components/schemas/CustomerPagedList"
+      security: [] # overriding the global security applied to be open and without authentication
     post:
       tags: 
         - Customers
@@ -81,6 +82,7 @@ paths:
                 $ref: '#/components/schemas/Customer'
         '404':
           description: Customer not found
+      security: [] # overriding the global security applied to be open and without authentication
     put:
       summary: Update customer
       description: update customer by id
@@ -264,7 +266,26 @@ paths:
           description: Beer deleted successfully
         '404':
           description: Beers not found
+
+# Bring security at the specification level, here we can apply this at each http verb level as well
+security: 
+  - HttpBasic: []
+  - JWTAuthToken: []
 components:
+  securitySchemes:
+  # Bring in basic Auth in scope Begin
+    HttpBasic:
+      type: http
+      scheme: basic
+      description: Bring in basic auth in scope
+  # Bring in basic Auth in scope End
+  # Bring in JWT token BEGIN
+    JWTAuthToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT mechanish for authorization
+  # Bring in JWT token BEGIN
   parameters:
     PageNumberParam:
       name: pageNumber
