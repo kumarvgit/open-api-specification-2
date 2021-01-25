@@ -44,3 +44,6 @@
 
 ## Security scheme object "https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#securitySchemeObject"
 ## Security scheme swagger docs https://swagger.io/docs/specification/authentication/
+
+# Codegenerator
+## One way - https://openapi-generator.tech/

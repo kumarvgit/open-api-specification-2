@@ -1,6 +1,6 @@
-openapi: 3.0.2 # required
-info: # requried
-  version: '1.0'
+---
+openapi: 3.0.2
+info:
   title: Open API3
   description: OpenAPI course
   termsOfService: http://example.tos.com/tos
@@ -11,112 +11,163 @@ info: # requried
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
-servers: 
-  - url: https://dev.example.com
-    description: Dev server
-  - url: https://qa.example.com
-    description: QA server
-  - url: https://prod.example.com
-    description: Prod Server
+  version: "1.0"
+servers:
+- url: https://dev.example.com
+  description: Dev server
+- url: https://qa.example.com
+  description: QA server
+- url: https://prod.example.com
+  description: Prod Server
+security:
+- HttpBasic: []
+- JWTAuthToken: []
 paths:
   /v1/customers:
     get:
-      tags: 
-        - Customers # Grouping together
-      operationId: getAllCustomersV1 # this is used by code gens
+      tags:
+      - Customers
       summary: List all customer
       description: Get all customer in system
-      parameters: 
-        - $ref: "#/components/parameters/PageNumberParam"
-        - $ref: "#/components/parameters/PageSizeParam"
-          
-      responses: # list of responses
-        '200':
+      operationId: getAllCustomersV1
+      parameters:
+      - name: pageNumber
+        in: query
+        description: Page number to be fetched
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: pageSize
+        in: query
+        description: Number of records to be fetched
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          type: integer
+          format: int32
+          default: 25
+      responses:
+        "200":
           description: List of customers
           content:
             application/json:
-              schema: #reponse type this can be another object
-                $ref: "#/components/schemas/CustomerPagedList"
-      security: [] # overriding the global security applied to be open and without authentication
+              schema:
+                $ref: '#/components/schemas/CustomerPagedList'
+      security: []
     post:
-      tags: 
-        - Customers
+      tags:
+      - Customers
       summary: Create a new customer
       description: Add anew customer to the system
       operationId: postCustomerV1
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Customer'
+        required: true
       responses:
-        '201':
-          description: "Customer created"
+        "201":
+          description: Customer created
           headers:
             Location:
+              style: simple
+              explode: false
               schema:
                 type: string
-                format: uri
                 description: the location of created resource in Location header
+                format: uri
                 example: http://example.com/v1/customers/{assignedId}
-        '400':
+        "400":
           description: Bad request
-        '409': # this is returned when there is a conflict
-          description: Conflit in creation 
+        "409":
+          description: Conflit in creation
   /v1/customers/{customerId}:
     get:
-      tags: 
-        - Customers # Grouping together
-      operationId: getCustomerByIdV1 # this is used by code gens
+      tags:
+      - Customers
       summary: Get single customerdetails
       description: Get complete  description of a **customer**
+      operationId: getCustomerByIdV1
       parameters:
-        - $ref: '#/components/parameters/CustomerIdPathParams'
+      - name: customerId
+        in: path
+        description: Id of customer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: uuid is a system generated value and it is hard to gess the next one
+          format: uuid
       responses:
-        '200':
+        "200":
           description: response when customer data is found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
-        '404':
+        "404":
           description: Customer not found
-      security: [] # overriding the global security applied to be open and without authentication
+      security: []
     put:
+      tags:
+      - Customers
       summary: Update customer
       description: update customer by id
       operationId: updateCustomerByIdV1
-      tags: 
-        - Customers
-      parameters: 
-        - $ref: '#/components/parameters/CustomerIdPathParams'
+      parameters:
+      - name: customerId
+        in: path
+        description: Id of customer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: uuid is a system generated value and it is hard to gess the next one
+          format: uuid
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Customer'
       responses:
-        '204':
+        "204":
           description: Customer updated
-        '400':
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Customer not found
-        '409':
+        "409":
           description: Conflict
     delete:
+      tags:
+      - Customers
       summary: Delete a customer by id
       description: Delete a customer by its id
       operationId: deleteCustomerByIdV1
-      tags: 
-        - Customers
-      parameters: 
-        - $ref: '#/components/parameters/CustomerIdPathParams'
+      parameters:
+      - name: customerId
+        in: path
+        description: Id of customer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: uuid is a system generated value and it is hard to gess the next one
+          format: uuid
       responses:
-        '200':
+        "200":
           description: Customer deleted successfully
-        '404':
+        "404":
           description: Customer not found
   /v1/customers/{customerId}/orders:
     post:
@@ -124,7 +175,16 @@ paths:
       - Order Service
       description: Place Order
       parameters:
-      - $ref: '#/components/parameters/CustomerIdPathParams'
+      - name: customerId
+        in: path
+        description: Id of customer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: uuid is a system generated value and it is hard to gess the next one
+          format: uuid
       requestBody:
         content:
           application/json:
@@ -132,7 +192,7 @@ paths:
               $ref: '#/components/schemas/BeerOrder'
         required: false
       responses:
-        201:
+        "201":
           description: Order Created
           headers:
             Location:
@@ -142,13 +202,13 @@ paths:
               schema:
                 type: string
                 format: uri
-        400:
+        "400":
           description: Bad Reqeust
-        404:
+        "404":
           description: Not Found
-        409:
+        "409":
           description: Conflict
-      callbacks: # CAllback functionality, https://swagger.io/docs/specification/callbacks/
+      callbacks:
         orderStatusChange:
           ${request.body#/orderStatusCallbackUrl}:
             description: Webhook for order status change notifications
@@ -165,293 +225,281 @@ paths:
                         orderStatus:
                           type: string
               responses:
-                200:
+                "200":
                   description: Okay
-            
   /v1/beers:
     get:
-      tags: 
-        - Beers # Grouping together
-      operationId: getAllBeersV1 # this is used by code gens
+      tags:
+      - Beers
       summary: Get all beers in system
       description: Find all beers in system
-      parameters: 
-        - $ref: "#/components/parameters/PageNumberParam"
-        - $ref: "#/components/parameters/PageSizeParam"
+      operationId: getAllBeersV1
+      parameters:
+      - name: pageNumber
+        in: query
+        description: Page number to be fetched
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: pageSize
+        in: query
+        description: Number of records to be fetched
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          type: integer
+          format: int32
+          default: 25
       responses:
-        '200':
+        "200":
           description: List of Beers
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BeerPagedList"
-                      
-        '404':
+                $ref: '#/components/schemas/BeerPagedList'
+        "404":
           description: Beers not found
     post:
-      tags: 
-        - Beers
+      tags:
+      - Beers
+      summary: created a new beer
       description: creats a new beer
       operationId: postBeersV1
-      summary: created a new beer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Beer'
+        required: true
       responses:
-        '201':
+        "201":
           description: Beer created
           headers:
             Location:
+              style: simple
+              explode: false
               schema:
                 type: string
                 description: location of the created resource
                 example: http://example.com/v1/beers/{idOfCreatedResouce}
-        '400':
+        "400":
           description: Bad request
-        '409': # this is returned when there is a conflict
-          description: Conflit in creation 
+        "409":
+          description: Conflit in creation
   /v1/beers/{beerId}:
     get:
-      tags: 
-        - Beers
-      operationId: getBeerByIdV1 # this is used by code gens
+      tags:
+      - Beers
       summary: Get details of specified beer
       description: Get details of single **beer**
-      parameters: 
-        - $ref: '#/components/parameters/BeerIdPathParam'
+      operationId: getBeerByIdV1
+      parameters:
+      - name: beerId
+        in: path
+        description: beer id to be found
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: uuid is a system generated value
+          format: uuid
       responses:
-        '200':
+        "200":
           description: found beer
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Beer'
-        '404':
+        "404":
           description: Beer not found
     put:
-      parameters:
-        - $ref: '#/components/parameters/BeerIdPathParam'
-      description: Update beer
+      tags:
+      - Beers
       summary: Update beer
+      description: Update beer
       operationId: updateBeerByIdV1
-      tags: 
-        - Beers
+      parameters:
+      - name: beerId
+        in: path
+        description: beer id to be found
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: uuid is a system generated value
+          format: uuid
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Beer'
       responses:
-        '204':
+        "204":
           description: Beer updated
-        '400':
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Beer not found
-        '409':
+        "409":
           description: Conflicting operation
     delete:
-      tags: 
-        - Beers
-      parameters: 
-        - $ref: '#/components/parameters/BeerIdPathParam'
-      description: Delete beer by id
+      tags:
+      - Beers
       summary: Delete a beer by its id
+      description: Delete beer by id
       operationId: deleteBeerByIdV1
+      parameters:
+      - name: beerId
+        in: path
+        description: beer id to be found
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: uuid is a system generated value
+          format: uuid
       responses:
-        '200':
+        "200":
           description: Beer deleted successfully
-        '404':
+        "404":
           description: Beers not found
-
-# Bring security at the specification level, here we can apply this at each http verb level as well
-security: 
-  - HttpBasic: []
-  - JWTAuthToken: []
 components:
-  securitySchemes:
-  # Bring in basic Auth in scope Begin
-    HttpBasic:
-      type: http
-      scheme: basic
-      description: Bring in basic auth in scope
-  # Bring in basic Auth in scope End
-  # Bring in JWT token BEGIN
-    JWTAuthToken:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: JWT mechanism for authorization
-  # Bring in JWT token BEGIN
-  parameters:
-    PageNumberParam:
-      name: pageNumber
-      in: query
-      required: false
-      description: Page number to be fetched
-      schema:
-        type: integer
-        format: int32
-        default: 0
-    PageSizeParam:
-      name: pageSize
-      in: query
-      required: false
-      description: Number of records to be fetched
-      schema:
-        type: integer
-        format: int32
-        default: 25
-        maximum: 100
-    CustomerIdPathParams:
-      name: customerId # this should match as it is in path else it won't match up
-      in: path
-      required: true
-      description: Id of customer
-      schema:
-        type: string
-        format: uuid
-        description: uuid is a system generated value and it is hard to gess the next one
-    BeerIdPathParam:
-      name: beerId
-      description: beer id to be found
-      in: path # indicates path param
-      required: true # requied true is mandatory for required
-      schema:
-        type: string
-        format: uuid
-        description: uuid is a system generated value
   schemas:
     Address:
       type: object
-      description: address object
       properties:
         line1:
           type: string
-          example: 123
+          example: "123"
         city:
           type: string
           example: BLR
         stateCode:
-          type: string
-          minLength: 2
           maxLength: 2
+          minLength: 2
+          type: string
           description: 2 letter state code
-          # enum: [AL, AK, AZ, AR, CA] one way handle enum
-          enum: 
-            - AL
-            - AK
-            - AZ
-            - AR
-            - CA
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
         zipcode:
           type: string
-          example: 560043
+          example: "560043"
+      description: address object
     Customer:
       type: object
-      description: customer object
       properties:
         id:
           type: string
           format: uuid
-          readOnly: true # readonly is a property which says it should not be supplied by the requester but may or may not be set by the server it is opposite of writeOnly
+          readOnly: true
         firstName:
-          type: string
-          minLength: 2
           maxLength: 100
-          example: Kumar # this is example value
+          minLength: 2
+          type: string
+          example: Kumar
         lastName:
-          type: string
-          minLength: 2
           maxLength: 100
-          example: Vaibhav #this is example value
+          minLength: 2
+          type: string
+          example: Vaibhav
         address:
-          $ref: "#/components/schemas/Address"
+          $ref: '#/components/schemas/Address'
+      description: customer object
     CustomerList:
-      type: array
-      minItems: 1
       maxItems: 100
+      minItems: 1
+      type: array
       description: List of customers
       items:
-        $ref: "#/components/schemas/Customer"
+        $ref: '#/components/schemas/Customer'
     Brewery:
       type: object
-      description: Brewery producing this
       properties:
         name:
-          type: string
-          minLength: 2
           maxLength: 100
+          minLength: 2
+          type: string
           description: Name of the brewery
           example: Titos
         location:
-          type: string
-          minLength: 2
           maxLength: 100
+          minLength: 2
+          type: string
           description: The city of the brewery
           example: BLR
+      description: Brewery producing this
     Beer:
       type: object
-      description: beer object
       properties:
         id:
           type: string
-          format: uuid
-          readOnly: true # readonly is a property which says it should not be supplied by the requester but may or may not be set by the server it is opposite of writeOnly
           description: id of the resource
+          format: uuid
+          readOnly: true
         beerName:
-          type: string
-          minLength: 2
           maxLength: 100
+          minLength: 2
+          type: string
           description: name of the beer
           example: Carlsberg
         style:
-          type: string
-          minLength: 2
           maxLength: 20
-          enum: 
-            - ALE
-            - PALE_ALE
-            - IPA
-            - WHEAT
-            - LAGER
+          minLength: 2
+          type: string
           description: style of the beer
+          enum:
+          - ALE
+          - PALE_ALE
+          - IPA
+          - WHEAT
+          - LAGER
         price:
-          type: number
-          format: float # define the subtype
           minimum: 0.1
+          type: number
           description: price of the beer
+          format: float
           example: 10.99
         quantityOnHand:
-          type: integer
-          format: int32 # define the subtype
-          minimum: 1
           maximum: 500
+          minimum: 1
+          type: integer
           description: Quantity to be held
+          format: int32
           example: 250
         brewery:
-          $ref: "#/components/schemas/Brewery"
+          $ref: '#/components/schemas/Brewery'
+      description: beer object
     BeerList:
       type: array
       items:
-        $ref: "#/components/schemas/Beer"
+        $ref: '#/components/schemas/Beer'
     BeerPagedList:
       type: object
-      allOf: # demonstrating inheritence
-        - $ref: "#/components/schemas/PagedResponse"
       properties:
         content:
-          $ref: "#/components/schemas/BeerList"
+          $ref: '#/components/schemas/BeerList'
+      allOf:
+      - $ref: '#/components/schemas/PagedResponse'
     CustomerPagedList:
       type: object
-      allOf: # demonstrating inheritence
-        - $ref: "#/components/schemas/PagedResponse"
       properties:
         content:
-          $ref: "#/components/schemas/CustomerList"
+          $ref: '#/components/schemas/CustomerList'
+      allOf:
+      - $ref: '#/components/schemas/PagedResponse'
     BeerOrder:
       required:
       - customerId
@@ -551,3 +599,59 @@ components:
           type: boolean
         unpaged:
           type: boolean
+  parameters:
+    PageNumberParam:
+      name: pageNumber
+      in: query
+      description: Page number to be fetched
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        default: 0
+    PageSizeParam:
+      name: pageSize
+      in: query
+      description: Number of records to be fetched
+      required: false
+      style: form
+      explode: true
+      schema:
+        maximum: 100
+        type: integer
+        format: int32
+        default: 25
+    CustomerIdPathParams:
+      name: customerId
+      in: path
+      description: Id of customer
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: uuid is a system generated value and it is hard to gess the next one
+        format: uuid
+    BeerIdPathParam:
+      name: beerId
+      in: path
+      description: beer id to be found
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: uuid is a system generated value
+        format: uuid
+  securitySchemes:
+    HttpBasic:
+      type: http
+      description: Bring in basic auth in scope
+      scheme: basic
+    JWTAuthToken:
+      type: http
+      description: JWT mechanism for authorization
+      scheme: bearer
+      bearerFormat: JWT
